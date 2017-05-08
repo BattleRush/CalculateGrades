@@ -1,0 +1,72 @@
+<html ng-app="gradeCalculator">
+
+<head>
+    <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/js/materialize.min.js"></script>
+
+
+    <script src="app\code.js"></script>
+    <link rel="stylesheet" type="text/css" href="app\style.css"></link>
+</head>
+
+<body ng-controller="MainController">
+    <div class="container">
+        <a class="btn waves-effect waves-light blue" ng-click="addNewClass('');"><i class="material-icons left">add</i>New Class</a>
+        <ul class="collapsible" data-collapsible="accordion">
+            <li class="collection-item" ng-repeat="class in classes">
+                <div class="collapsible-header" ng-style="getClassByGrade(class);">
+                    <i class="material-icons">{{getIconByGrade(class)}}</i>{{class.Name}} <span ng-if="class.RoundedGrade >= 1"> - {{class.RoundedGrade}} ({{getClassAverageScore(class)}})</span>
+                    <a href="#!" class="secondary-content" ng-click="removeClass(class)"><i class="material-icons">close</i></a>
+                </div>
+
+                <div class="collapsible-body">
+                    <div class="row">
+                        <div class="input-field col s2">
+                            <input placeholder="Enter class name" type="text" class="validate" ng-model="class.Name">
+                        </div>
+                        <div class="input-field col s2" ng-show="false">
+                            <p class="range-field">
+                                <input type="range" min="1" max="5" ng-model="class.TotalGrades" /></p>
+                        </div>
+                        <div ng-repeat="grade in class.CurrentGrades track by $index">
+                            <div class="input-field col s1">
+                                <input placeholder="Enter grade" type="number" min="1.00" max="6.00" step="0.05" ng-model="grade.value">
+                            </div>
+                        </div>
+                        <div class="input-field col s1">
+                            <a class="btn-floating btn waves-effect waves-light red" ng-click="addNewGrade(class);" ng-show="class.CurrentGrades.length < 10"><i class="material-icons">add</i></a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        </br>
+
+        Avg grade: {{getAverageScore()}}</br>
+        + score {{getTotalScore(true)}}</br>
+        - score {{getTotalScore(false)}}</br>
+        Total score: {{getTotalScore(true) - getTotalScore(false)}}</br>
+
+        ----
+
+        <ul style="list-style-type:disc">
+            <li>&#9658; 1 is the worst grade and 6 is the best.</li>
+            <li>&#9658; All grades under 4 are counted as negative.</li>
+            <li>&#9658; If a grade is under 4, then the difference is being counted with a X2 multiplier.</li>
+            <li>&#9658; The difference over 4 is counted with the X1 multiplier.</li>
+        </ul>
+
+        <div class="footerInfo">
+            Created by: <a href="https://github.com/BattleRush" target="blank">BattleRush</a></br>
+            Background picture by <a href="https://spacex.com/" target="blank">SpaceX</a>
+        </div>
+</body>
+
+</html>

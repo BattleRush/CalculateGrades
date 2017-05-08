@@ -1,0 +1,50 @@
+h1,
+h2,
+h3,
+h4,
+p {
+    color: white;
+}
+
+html {
+    font-size: 14px;
+    color: white;
+}
+
+body {
+    background: linear-gradient( rgba(0, 0, 15, 0.60), rgba(0, 0, 0, 0.60)), url(../images/background.jpg) no-repeat center center fixed;
+    background-size: cover;
+    background-attachment: fixed;
+    padding: 30px;
+    overflow-x: hidden;
+    font-size: 14px;
+}
+
+
+/*OVERWRITES*/
+
+.collapsible-header {
+    background-color: transparent;
+}
+
+.collapsible-body {
+    padding: 0 20px 0 20px;
+}
+
+.collapsible-body .row {
+    margin-bottom: 0;
+}
+
+.secondary-content {
+    margin-right: -22px;
+    color: red;
+}
+
+.footerInfo {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 1rem;
+    text-align: center;
+}
