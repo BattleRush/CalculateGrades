@@ -18,7 +18,7 @@ app.controller('MainController', ['$scope', '$filter', function($scope, $filter)
     $scope.classes = [];
 
     $scope.addNewGrade = function(value) {
-        value.CurrentGrades.push({ value: 0 });
+        value.CurrentGrades.push({ value: null });
     };
 
     $scope.removeClass = function(value) {
@@ -29,7 +29,7 @@ app.controller('MainController', ['$scope', '$filter', function($scope, $filter)
         $scope.classes.push({
             Id: $scope.classes.length,
             Name: className,
-            RoundedGrade: 0,
+            RoundedGrade: null,
             CurrentGrades: []
         });
     }
