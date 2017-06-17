@@ -106,7 +106,7 @@ app.controller('MainController', ['$scope', '$filter', '$cookies', function ($sc
     $scope.saveCookie = function () {
         // Save all 15 seconds the cookie. We aren't doing rocket science here
         setTimeout(function () {
-            $cookies.put('calculateGradesClasses', ($scope.classes && $scope.classes.length > 1) ? JSON.stringify($scope.classes) : null);
+            $cookies.put('calculateGradesClasses', ($scope.classes && $scope.classes.length > 1) ? JSON.stringify($scope.classes) : undefined);
             $scope.saveCookie();
         }, 15000);
     };
