@@ -1,7 +1,7 @@
-var app = angular.module("gradeCalculator", []);
+var app = angular.module("gradeCalculator", ['ngCookies']);
 
 app.config(['$locationProvider',
-    function($locationProvider) {
+    function ($locationProvider) {
         if (window.history && window.history.pushState) {
             $locationProvider.html5Mode({
                 enabled: true,
@@ -11,21 +11,21 @@ app.config(['$locationProvider',
     }
 ]);
 
-app.controller('MainController', ['$scope', '$filter', function($scope, $filter) {
+app.controller('MainController', ['$scope', '$filter', '$cookies', function ($scope, $filter, $cookies) {
     $scope.negativeGradesUnder = 4;
     $scope.negativeMultiplier = 2;
 
     $scope.classes = [];
 
-    $scope.addNewGrade = function(value) {
+    $scope.addNewGrade = function (value) {
         value.CurrentGrades.push({ value: null });
     };
 
-    $scope.removeClass = function(value) {
+    $scope.removeClass = function (value) {
         $scope.classes.splice($scope.classes.indexOf(value), 1);
     };
 
-    $scope.addNewClass = function(className) {
+    $scope.addNewClass = function (className) {
         $scope.classes.push({
             Id: $scope.classes.length,
             Name: className,
@@ -34,20 +34,7 @@ app.controller('MainController', ['$scope', '$filter', function($scope, $filter)
         });
     }
 
-    $scope.initClases = function() {
-        $scope.addNewClass('Math');
-        $scope.addNewClass('German');
-        $scope.addNewClass('English');
-        $scope.addNewClass('French');
-        $scope.addNewClass('Biology');
-        $scope.addNewClass('Geography');
-        $scope.addNewClass('History');
-        $scope.addNewClass('Chemistry');
-    }
-
-    $scope.initClases();
-
-    $scope.getClassAverageScore = function(currentClass) {
+    $scope.getClassAverageScore = function (currentClass) {
         var Grades = [];
 
         for (n in currentClass.CurrentGrades) {
@@ -60,23 +47,23 @@ app.controller('MainController', ['$scope', '$filter', function($scope, $filter)
         return Math.round((Grades.reduce((a, b) => a + b, 0) / Grades.length) * 100) / 100;
     };
 
-    $scope.getAverageScore = function() {
+    $scope.getAverageScore = function (fromRoundedValues) {
         var allGrades = [];
-        angular.forEach($scope.classes, function(value, key) {
+        angular.forEach($scope.classes, function (value, key) {
             var currentClassGrade = $scope.getClassAverageScore(value);
 
             if (isNumeric(currentClassGrade) && currentClassGrade >= 1) {
                 value.RoundedGrade = Math.round(currentClassGrade * 2) / 2;
-                allGrades.push(currentClassGrade);
+                allGrades.push(fromRoundedValues ? value.RoundedGrade : currentClassGrade);
             }
         });
 
-        return allGrades.reduce((a, b) => a + b, 0) / allGrades.length;
+        return Math.round(allGrades.reduce((a, b) => a + b, 0) / allGrades.length * 100) / 100;
     };
 
-    $scope.getTotalScore = function(plusScore) {
+    $scope.getTotalScore = function (plusScore) {
         var score = 0
-        angular.forEach($scope.classes, function(value, key) {
+        angular.forEach($scope.classes, function (value, key) {
             var currentClassGrade = $scope.getClassAverageScore(value);
 
             if (isNumeric(currentClassGrade) && currentClassGrade >= 1) {
@@ -94,8 +81,41 @@ app.controller('MainController', ['$scope', '$filter', function($scope, $filter)
         return score;
     };
 
+    $scope.initClases = function () {
+        $scope.addNewClass('Math');
+        $scope.addNewClass('German');
+        $scope.addNewClass('English');
+        $scope.addNewClass('French');
+        $scope.addNewClass('Biology');
+        $scope.addNewClass('Geography');
+        $scope.addNewClass('History');
+        $scope.addNewClass('Chemistry');
+    }
+
+    $scope.loadCookie = function () {
+        var calculateGradesClassesJson = $cookies.get('calculateGradesClasses');
+
+        if (calculateGradesClassesJson)
+            $scope.classes = JSON.parse(calculateGradesClassesJson);
+        else
+            $scope.initClases(); // Load default empty classes
+
+        console.log(calculateGradesClassesJson);
+    };
+
+    $scope.saveCookie = function () {
+        // Save all 15 seconds the cookie. We aren't doing rocket science here
+        setTimeout(function () {
+            $cookies.put('calculateGradesClasses', JSON.stringify($scope.classes));
+            $scope.saveCookie();
+        }, 15000);
+    };
+
+    $scope.loadCookie();
+    $scope.saveCookie();
+
     /* STYLE ANGULAR */
-    $scope.getClassByGrade = function(value) {
+    $scope.getClassByGrade = function (value) {
         if (value.RoundedGrade < 1)
             return { 'background-color': 'rgba(0, 0, 0, 0.5)' };
         if (value.RoundedGrade < 2)
@@ -110,7 +130,7 @@ app.controller('MainController', ['$scope', '$filter', function($scope, $filter)
             return { 'background-color': 'rgba(76, 175, 80, 0.5)' };
     };
 
-    $scope.getIconByGrade = function(value) {
+    $scope.getIconByGrade = function (value) {
         if (value.RoundedGrade < 1)
             return "school";
         if (value.RoundedGrade < 2)

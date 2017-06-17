@@ -2,7 +2,10 @@
 
 <head>
     <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular.min.js"></script>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-cookies.js"></script>
+
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <!-- Compiled and minified CSS -->
@@ -13,7 +16,7 @@
 
 
     <script src="app\code.js"></script>
-    <link rel="stylesheet" type="text/css" href="app\style.css"></link>
+    <link rel="stylesheet" type="text/css" href="app\style.css" />
 </head>
 
 <body ng-controller="MainController">
@@ -33,7 +36,8 @@
                         </div>
                         <div class="input-field col s2" ng-show="false">
                             <p class="range-field">
-                                <input type="range" min="1" max="5" ng-model="class.TotalGrades" /></p>
+                                <input type="range" min="1" max="5" ng-model="class.TotalGrades" />
+                            </p>
                         </div>
                         <div ng-repeat="grade in class.CurrentGrades track by $index">
                             <div class="input-field col s1">
@@ -47,9 +51,10 @@
                 </div>
             </li>
         </ul>
+
         </br>
 
-        Avg grade: {{getAverageScore()}}</br>
+        Avg grade: {{getAverageScore(true)}} ({{getAverageScore(false)}})</br>
         + score {{getTotalScore(true)}}</br>
         - score {{getTotalScore(false)}}</br>
         Total score: {{getTotalScore(true) - getTotalScore(false)}}</br>
@@ -62,11 +67,11 @@
             <li>&#9658; If a grade is under 4, then the difference is being counted with a X2 multiplier.</li>
             <li>&#9658; The difference over 4 is counted with the X1 multiplier.</li>
         </ul>
-
-        <div class="footerInfo">
-            Created by: <a href="https://github.com/BattleRush" target="blank">BattleRush</a></br>
-            Background picture by <a href="https://spacex.com/" target="blank">SpaceX</a>
-        </div>
+    </div>
+    <div class="footerInfo">
+        Created by: <a href="https://github.com/BattleRush" target="blank">BattleRush</a></br>
+        Background picture by <a href="https://spacex.com/" target="blank">SpaceX</a>
+    </div>
 </body>
 
 </html>
